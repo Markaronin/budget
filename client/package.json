@@ -24,7 +24,7 @@
   },
   "scripts": {
     "dev": "yarn && webpack serve --config webpack.dev.js",
-    "build": "yarn && webpack --config webpack.prod.js"
+    "build": "webpack --config webpack.prod.js"
   },
   "dependencies": {
     "@markaronin/alert-helper": "1.0.4",

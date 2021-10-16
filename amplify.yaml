@@ -4,6 +4,7 @@ frontend:
     preBuild:
       commands:
         - cd client
+        - yarn install
     build:
       commands:
         - yarn build
