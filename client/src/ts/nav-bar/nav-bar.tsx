@@ -25,8 +25,7 @@ export class NavBarWithoutRouter extends Component<NavBarProps, NavBarState> {
     render(): JSX.Element {
         return (
             <div className="navList">
-                <FancyNavLink to="/">Home</FancyNavLink>
-                <FancyNavLink to="/budgets">Budgets</FancyNavLink>
+                <FancyNavLink to="/">Budgets</FancyNavLink>
             </div>
         );
     }

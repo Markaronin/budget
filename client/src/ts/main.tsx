@@ -7,7 +7,6 @@ import { getCookie } from "@markaronin/jefferson-util";
 import { NavBar } from "./nav-bar/nav-bar";
 import { BudgetsPage } from "./pages/budgets/budgets";
 import { BudgetPage } from "./pages/budget/budget";
-import { HomePage } from "./pages/home/home";
 
 const queryClient = new QueryClient();
 queryClient.setDefaultOptions({
@@ -30,9 +29,9 @@ class MainDiv extends Component<MainDivProps, MainDivState> {
                 <NavBar />
                 <AlertHelperComponent />
                 <Switch>
+                    <Route exact path="/" component={BudgetsPage} />
                     <Route exact path="/budgets" component={BudgetsPage} />
                     <Route exact path="/budgets/:id" component={BudgetPage} />
-                    <Route exact path="/" component={HomePage} />
                     <Route path="*">
                         <Redirect to="/" />
                     </Route>
