@@ -2,6 +2,7 @@ import { alertHelper } from "@markaronin/alert-helper";
 import React from "react";
 import { useQuery } from "react-query";
 import { APIHelper } from "../../api-helper/api-helper";
+import { BudgetRow } from "./budget-row/budget-row";
 
 export const BudgetsPage = (): JSX.Element => {
     const {
@@ -23,7 +24,7 @@ export const BudgetsPage = (): JSX.Element => {
         return (
             <div>
                 {budgets.map((budget) => (
-                    <div key={budget.id}>{budget.name}</div>
+                    <BudgetRow budget={budget} key={budget.id} />
                 ))}
             </div>
         );
