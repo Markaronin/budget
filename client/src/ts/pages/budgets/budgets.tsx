@@ -1,8 +1,10 @@
 import { alertHelper } from "@markaronin/alert-helper";
-import React from "react";
-import { useQuery } from "react-query";
+import React, { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { APIHelper } from "../../api-helper/api-helper";
+import { createBudgetMutationFunctions } from "../../api-helper/query-helper";
 import { BudgetRow } from "./budget-row/budget-row";
+import { CreateBudgetWidget } from "./create-button-widget/create-budget-widget";
 
 export const BudgetsPage = (): JSX.Element => {
     const {
@@ -20,12 +22,33 @@ export const BudgetsPage = (): JSX.Element => {
         }),
     );
 
+    const [creatingBudget, setCreatingBudget] = useState(false);
+
+    const queryClient = useQueryClient();
+
+    const createBudgetFns = createBudgetMutationFunctions(queryClient);
+    const handleCreateBudgetMutation = useMutation(createBudgetFns.fn, {
+        ...createBudgetFns.options,
+    });
+
     if (budgets !== undefined && !isFetchingBudgets) {
         return (
             <div>
                 {budgets.map((budget) => (
                     <BudgetRow budget={budget} key={budget.id} />
                 ))}
+                <hr />
+                {creatingBudget ? (
+                    <CreateBudgetWidget
+                        handleCreateBudget={(newBudgetname) => {
+                            handleCreateBudgetMutation.mutate({ budgetName: newBudgetname });
+                            setCreatingBudget(false);
+                        }}
+                        handleCancel={() => setCreatingBudget(false)}
+                    />
+                ) : (
+                    <button onClick={() => setCreatingBudget(true)}>Create new Budget</button>
+                )}
             </div>
         );
     } else if (budgetsLoadError) {

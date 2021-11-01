@@ -10,6 +10,7 @@ export interface SuccessfulResponse {
 
 export interface CreateBudgetResponse extends SuccessfulResponse {
     success: true;
+    id: string;
 }
 export interface ListBudgetsResponse extends SuccessfulResponse {
     success: true;
@@ -24,6 +25,7 @@ export interface DeleteBudgetResponse extends SuccessfulResponse {
 
 export interface CreateExpenseResponse extends SuccessfulResponse {
     success: true;
+    id: string;
 }
 export interface ListExpensesResponse extends SuccessfulResponse {
     success: true;

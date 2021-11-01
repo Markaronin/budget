@@ -13,6 +13,16 @@ import {
 } from "./response";
 
 export class APIHelper {
+    // Public variables
+
+    private static rawJwt = notUndefined(getCookie("Auth"));
+    private static rawJwtPayload = APIHelper.rawJwt.split(".")[1];
+    public static jwtPayload: { data: { id: string; username: string; email: string } } = JSON.parse(
+        window.atob(APIHelper.rawJwtPayload),
+    );
+
+    // Public functions
+
     public static createBudget(body: CreateBudgetRequest): Promise<CreateBudgetResponse | UnsuccessfulResponse> {
         return APIHelper.jsonPostRequest("budgets", body);
     }
@@ -78,7 +88,7 @@ export class APIHelper {
     private static handleFetch(url: string, options: RequestInit): Promise<any | UnsuccessfulResponse> {
         return fetch(`${APIHelper.baseUrl}/${url}`, {
             ...options,
-            headers: { ...options.headers, authorization: `Bearer ${notUndefined(getCookie("Auth"))}` },
+            headers: { ...options.headers, authorization: `Bearer ${APIHelper.rawJwt}` },
         })
             .then((response) => {
                 if (response.ok) {

@@ -1,7 +1,7 @@
 export interface Budget {
     id: string;
     name: string;
-    userIds: string[];
+    users: string[];
 }
 
 export interface Expense {

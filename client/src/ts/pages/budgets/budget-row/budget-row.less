@@ -1,7 +1,26 @@
 .budget-row {
+  display: flex;
   & a {
     color: inherit;
   }
+  & button.edit {
+    margin-left: auto;
+    margin-right: 1ch;
+  }
+  & button.delete {
+    background-color: #faa;
+    &:hover {
+      background-color: #f88;
+    }
+    &:active {
+      background-color: #f55;
+    }
+  }
+  &:hover {
+    background-color: #444;
+  }
+  padding-left: 1ch;
+  margin-top: 1ch;
   margin-bottom: 1ch;
   font-size: larger;
 }
