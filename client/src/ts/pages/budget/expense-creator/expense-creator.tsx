@@ -24,8 +24,9 @@ const RestOfExpenseValueGetter = ({ handleEdit, currentValue }: RestOfExpenseVal
                 <input
                     placeholder="amount"
                     type="number"
-                    value={currentValue.amount}
-                    onChange={(event) => handleEdit({ ...currentValue, amount: parseInt(event.currentTarget.value) })}
+                    step="0.01"
+                    min="0"
+                    onChange={(event) => handleEdit({ ...currentValue, amount: Number(event.currentTarget.value) })}
                 />
                 <br />
                 <input

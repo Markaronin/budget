@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
 import { deleteBudgetMutationFunctions, editBudgetMutationFunctions } from "../../../api-helper/query-helper";
-import { handleEnter } from "../../../common";
+import { formatAsDollars, handleEnter } from "../../../common";
 import { Budget } from "../../../model";
 import "./budget-row.less";
 
 interface BudgetRowProps {
     budget: Budget;
+    balance: number;
 }
-export const BudgetRow = ({ budget }: BudgetRowProps): JSX.Element => {
+export const BudgetRow = ({ budget, balance }: BudgetRowProps): JSX.Element => {
     const queryClient = useQueryClient();
     const deleteBudgetFns = deleteBudgetMutationFunctions(queryClient);
     const handleDeleteBudgetMutation = useMutation(deleteBudgetFns.fn, {
@@ -47,7 +48,7 @@ export const BudgetRow = ({ budget }: BudgetRowProps): JSX.Element => {
                 <Link to={`/budgets/${budget.id}`} key={budget.id}>
                     {budget.name}
                 </Link>
-
+                &nbsp;-&nbsp;{formatAsDollars(balance)}
                 <button className="edit" onClick={() => setEditing(true)}>
                     Edit
                 </button>

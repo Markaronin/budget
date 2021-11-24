@@ -20,11 +20,17 @@ export class DateUtil {
     }
 
     public static dateInputToMillisecondsSinceEpoch(dateInput: string): number {
-        return DateUtil.javascriptDateToMillisecondsSinceEpoch(DateUtil.dateInputToJavascriptDate(dateInput));
+        return this.javascriptDateToMillisecondsSinceEpoch(this.dateInputToJavascriptDate(dateInput));
     }
     public static millisecondsSinceEpochToDateInput(millisecondsSinceEpoch: number): string {
-        return DateUtil.javascriptDateToDateInput(
-            DateUtil.millisecondsSinceEpochToJavascriptDate(millisecondsSinceEpoch),
-        );
+        return this.javascriptDateToDateInput(this.millisecondsSinceEpochToJavascriptDate(millisecondsSinceEpoch));
+    }
+
+    public static getMillisecondsSinceEpoch(): number {
+        return Date.now();
+    }
+
+    public static isMillisecondsSinceEpochAfterNow(millisecondsSinceEpoch: number): boolean {
+        return this.getMillisecondsSinceEpoch() < millisecondsSinceEpoch;
     }
 }

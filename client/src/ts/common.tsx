@@ -39,3 +39,11 @@ export function padWithZeroes(num: number, size: number): string {
     while (newNumber.length < size) newNumber = "0" + num;
     return newNumber;
 }
+
+const dollarFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+});
+export const formatAsDollars = (amount: number): string => {
+    return dollarFormatter.format(amount);
+};

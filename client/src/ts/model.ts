@@ -1,4 +1,5 @@
 import { notUndefined } from "@markaronin/jefferson-util";
+import { DateUtil } from "./dateutil";
 
 export interface Budget {
     id: string;
@@ -39,17 +40,21 @@ export interface PercentExpense extends Expense {
 }
 export type CompleteExpense = RecurringExpense | ContinuousExpense | ManualExpense | PercentExpense;
 
-export function getValueOfExpense(expenseId: string, budgets: Budget[], expenses: Expense[]): number {
+export function getValueOfExpense(expenseId: string, budgets: Budget[], expenses: CompleteExpense[]): number {
     const expense = notUndefined(expenses.find((expense) => expense.id === expenseId));
-    if (expense.type === 1) {
-        return expense.amount;
+    if (expense.type === 3) {
+        if (DateUtil.isMillisecondsSinceEpochAfterNow(expense.date)) {
+            return 0;
+        } else {
+            return expense.amount;
+        }
     }
     // TODO - remove
     budgets;
     throw new Error(`No logic set up to get value for expense type ${expense.type}`);
 }
 
-export function getBalanceOfBudget(budgetId: string, budgets: Budget[], expenses: Expense[]): number {
+export function getBalanceOfBudget(budgetId: string, budgets: Budget[], expenses: CompleteExpense[]): number {
     return (
         expenses
             .filter((expense) => expense.to === budgetId)

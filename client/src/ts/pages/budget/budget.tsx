@@ -71,7 +71,7 @@ export const BudgetPage = ({ match }: BudgetPageProps): JSX.Element => {
             </div>
         );
     } else if (budgetsLoadError || expensesLoadError) {
-        return <p>Error loading budget</p>;
+        return <p>Error loading budgets or expenses</p>;
     } else {
         return <p>Loading budget...</p>;
     }
