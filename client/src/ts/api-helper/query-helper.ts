@@ -71,7 +71,9 @@ export const deleteBudgetMutationFunctions = (
                         ...previousBudgets.filter((budget) => budget.id !== variables.budgetId),
                     ]);
                 }
+                // TODO - also modify expenses
             },
         },
     };
 };
+// TODO - expense mutation functions

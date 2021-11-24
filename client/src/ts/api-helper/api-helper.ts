@@ -42,8 +42,8 @@ export class APIHelper {
     public static createExpense(body: CreateExpenseRequest): Promise<CreateExpenseResponse | UnsuccessfulResponse> {
         return APIHelper.jsonPostRequest("expenses", body);
     }
-    public static listExpensesForBudget(budgetId: string): Promise<ListExpensesResponse | UnsuccessfulResponse> {
-        return APIHelper.jsonGetRequest(`budgets/${budgetId}/expenses`);
+    public static listExpenses(): Promise<ListExpensesResponse | UnsuccessfulResponse> {
+        return APIHelper.jsonGetRequest("expenses");
     }
     public static updateExpense(
         expenseId: string,
