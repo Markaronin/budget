@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { handleEnter } from "../../../common";
 
 interface CreateBudgetWidgetProps {
     handleCancel: () => void;
@@ -13,6 +14,7 @@ export const CreateBudgetWidget = ({ handleCancel, handleCreateBudget }: CreateB
                 type="text"
                 placeholder="Budget name"
                 value={name}
+                onKeyDown={handleEnter(() => handleCreateBudget(name))}
                 onChange={(event) => setName(event.currentTarget.value)}
             />
             <br />
