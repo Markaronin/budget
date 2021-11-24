@@ -1,9 +1,18 @@
 import { QueryClient } from "react-query";
-import { Budget } from "../model";
+import { Budget, Expense } from "../model";
 import { APIHelper } from "./api-helper";
-import { CreateBudgetResponse, DeleteBudgetResponse, UnsuccessfulResponse, UpdateBudgetResponse } from "./response";
+import {
+    CreateBudgetResponse,
+    CreateExpenseResponse,
+    DeleteBudgetResponse,
+    DeleteExpenseResponse,
+    UnsuccessfulResponse,
+    UpdateBudgetResponse,
+    UpdateExpenseResponse,
+} from "./response";
 
 export const BUDGET_QUERY_CLIENT_KEY = "budgets";
+export const EXPENSE_QUERY_CLIENT_KEY = "expenses";
 
 type MutationFunctions<Var, Resp> = {
     fn: (variables: Var) => Promise<Resp>;
@@ -76,4 +85,67 @@ export const deleteBudgetMutationFunctions = (
         },
     };
 };
-// TODO - expense mutation functions
+export const createExpenseMutationFunctions = (
+    queryClient: QueryClient,
+): MutationFunctions<Omit<Expense, "id">, CreateExpenseResponse | UnsuccessfulResponse> => {
+    return {
+        fn: (variables) => APIHelper.createExpense(variables),
+        options: {
+            onMutate: () => {
+                queryClient.cancelQueries(EXPENSE_QUERY_CLIENT_KEY);
+            },
+            onSuccess: (response, variables) => {
+                const previousExpenses = queryClient.getQueryData<Expense[]>(EXPENSE_QUERY_CLIENT_KEY);
+
+                if (previousExpenses && response.success) {
+                    queryClient.setQueryData<Expense[]>(EXPENSE_QUERY_CLIENT_KEY, [
+                        ...previousExpenses,
+                        { id: response.id, ...variables },
+                    ]);
+                }
+            },
+        },
+    };
+};
+export const editExpenseMutationFunctions = (
+    queryClient: QueryClient,
+): MutationFunctions<
+    { expenseId: string; data: Omit<Expense, "id"> },
+    UpdateExpenseResponse | UnsuccessfulResponse
+> => {
+    return {
+        fn: (variables) => APIHelper.updateExpense(variables.expenseId, variables.data),
+        options: {
+            onMutate: (variables) => {
+                queryClient.cancelQueries(EXPENSE_QUERY_CLIENT_KEY);
+                const previousExpenses = queryClient.getQueryData<Expense[]>(EXPENSE_QUERY_CLIENT_KEY);
+
+                if (previousExpenses) {
+                    queryClient.setQueryData<Expense[]>(EXPENSE_QUERY_CLIENT_KEY, [
+                        ...previousExpenses.filter((expense) => expense.id !== variables.expenseId),
+                        { id: variables.expenseId, ...variables.data },
+                    ]);
+                }
+            },
+        },
+    };
+};
+export const deleteExpenseMutationFunctions = (
+    queryClient: QueryClient,
+): MutationFunctions<{ expenseId: string }, DeleteExpenseResponse | UnsuccessfulResponse> => {
+    return {
+        fn: (variables) => APIHelper.deleteExpense(variables.expenseId),
+        options: {
+            onMutate: (variables) => {
+                queryClient.cancelQueries(EXPENSE_QUERY_CLIENT_KEY);
+                const previousExpenses = queryClient.getQueryData<Expense[]>(EXPENSE_QUERY_CLIENT_KEY);
+
+                if (previousExpenses) {
+                    queryClient.setQueryData<Expense[]>(EXPENSE_QUERY_CLIENT_KEY, [
+                        ...previousExpenses.filter((expense) => expense.id !== variables.expenseId),
+                    ]);
+                }
+            },
+        },
+    };
+};
