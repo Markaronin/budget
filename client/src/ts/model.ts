@@ -6,11 +6,12 @@ export interface Budget {
     users: string[];
 }
 
-export interface Expense {
+interface Expense {
     id: string;
     name: string;
-    to: string;
-    from: string;
+    description: string;
+    to?: string;
+    from?: string;
     type: number;
     amount: number;
 }
@@ -36,6 +37,7 @@ export interface PercentExpense extends Expense {
     start: number;
     end?: number;
 }
+export type CompleteExpense = RecurringExpense | ContinuousExpense | ManualExpense | PercentExpense;
 
 export function getValueOfExpense(expenseId: string, budgets: Budget[], expenses: Expense[]): number {
     const expense = notUndefined(expenses.find((expense) => expense.id === expenseId));

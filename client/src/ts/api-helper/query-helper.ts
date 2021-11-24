@@ -1,5 +1,5 @@
 import { QueryClient } from "react-query";
-import { Budget, Expense } from "../model";
+import { Budget, CompleteExpense } from "../model";
 import { APIHelper } from "./api-helper";
 import {
     CreateBudgetResponse,
@@ -87,7 +87,7 @@ export const deleteBudgetMutationFunctions = (
 };
 export const createExpenseMutationFunctions = (
     queryClient: QueryClient,
-): MutationFunctions<Omit<Expense, "id">, CreateExpenseResponse | UnsuccessfulResponse> => {
+): MutationFunctions<Omit<CompleteExpense, "id">, CreateExpenseResponse | UnsuccessfulResponse> => {
     return {
         fn: (variables) => APIHelper.createExpense(variables),
         options: {
@@ -95,11 +95,13 @@ export const createExpenseMutationFunctions = (
                 queryClient.cancelQueries(EXPENSE_QUERY_CLIENT_KEY);
             },
             onSuccess: (response, variables) => {
-                const previousExpenses = queryClient.getQueryData<Expense[]>(EXPENSE_QUERY_CLIENT_KEY);
+                const previousExpenses = queryClient.getQueryData<CompleteExpense[]>(EXPENSE_QUERY_CLIENT_KEY);
 
                 if (previousExpenses && response.success) {
-                    queryClient.setQueryData<Expense[]>(EXPENSE_QUERY_CLIENT_KEY, [
+                    queryClient.setQueryData<CompleteExpense[]>(EXPENSE_QUERY_CLIENT_KEY, [
+                        // @ts-expect-error typescript hates me
                         ...previousExpenses,
+                        // @ts-expect-error typescript hates me
                         { id: response.id, ...variables },
                     ]);
                 }
@@ -110,7 +112,7 @@ export const createExpenseMutationFunctions = (
 export const editExpenseMutationFunctions = (
     queryClient: QueryClient,
 ): MutationFunctions<
-    { expenseId: string; data: Omit<Expense, "id"> },
+    { expenseId: string; data: Omit<CompleteExpense, "id"> },
     UpdateExpenseResponse | UnsuccessfulResponse
 > => {
     return {
@@ -118,11 +120,13 @@ export const editExpenseMutationFunctions = (
         options: {
             onMutate: (variables) => {
                 queryClient.cancelQueries(EXPENSE_QUERY_CLIENT_KEY);
-                const previousExpenses = queryClient.getQueryData<Expense[]>(EXPENSE_QUERY_CLIENT_KEY);
+                const previousExpenses = queryClient.getQueryData<CompleteExpense[]>(EXPENSE_QUERY_CLIENT_KEY);
 
                 if (previousExpenses) {
-                    queryClient.setQueryData<Expense[]>(EXPENSE_QUERY_CLIENT_KEY, [
+                    queryClient.setQueryData<CompleteExpense[]>(EXPENSE_QUERY_CLIENT_KEY, [
+                        // @ts-expect-error typescript hates me
                         ...previousExpenses.filter((expense) => expense.id !== variables.expenseId),
+                        // @ts-expect-error typescript hates me
                         { id: variables.expenseId, ...variables.data },
                     ]);
                 }
@@ -138,10 +142,10 @@ export const deleteExpenseMutationFunctions = (
         options: {
             onMutate: (variables) => {
                 queryClient.cancelQueries(EXPENSE_QUERY_CLIENT_KEY);
-                const previousExpenses = queryClient.getQueryData<Expense[]>(EXPENSE_QUERY_CLIENT_KEY);
+                const previousExpenses = queryClient.getQueryData<CompleteExpense[]>(EXPENSE_QUERY_CLIENT_KEY);
 
                 if (previousExpenses) {
-                    queryClient.setQueryData<Expense[]>(EXPENSE_QUERY_CLIENT_KEY, [
+                    queryClient.setQueryData<CompleteExpense[]>(EXPENSE_QUERY_CLIENT_KEY, [
                         ...previousExpenses.filter((expense) => expense.id !== variables.expenseId),
                     ]);
                 }

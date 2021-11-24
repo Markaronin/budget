@@ -1,4 +1,4 @@
-import { Budget, Expense } from "../model";
+import { Budget, CompleteExpense } from "../model";
 
 export interface UnsuccessfulResponse {
     success: false;
@@ -29,7 +29,7 @@ export interface CreateExpenseResponse extends SuccessfulResponse {
 }
 export interface ListExpensesResponse extends SuccessfulResponse {
     success: true;
-    expenses: Expense[];
+    expenses: CompleteExpense[];
 }
 export interface UpdateExpenseResponse extends SuccessfulResponse {
     success: true;
