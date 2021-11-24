@@ -34,9 +34,11 @@ export const BudgetsPage = (): JSX.Element => {
     if (budgets !== undefined && !isFetchingBudgets) {
         return (
             <div>
-                {budgets.map((budget) => (
-                    <BudgetRow budget={budget} key={budget.id} />
-                ))}
+                {budgets
+                    .sort((budget1, budget2) => budget1.name.localeCompare(budget2.name))
+                    .map((budget) => (
+                        <BudgetRow budget={budget} key={budget.id} />
+                    ))}
                 <hr />
                 {creatingBudget ? (
                     <CreateBudgetWidget
